@@ -18,6 +18,6 @@ public class UserController {
 	}
 	@GetMapping("/user")
 	public Mono<String> returnMono() {
-		return Mono.just("User Api working "+ env.getProperty("local.server.port")).log();
+		return Mono.just(env.getProperty("user.name") +"User Api working "+ env.getProperty("local.server.port")).log();
 	}
 }
