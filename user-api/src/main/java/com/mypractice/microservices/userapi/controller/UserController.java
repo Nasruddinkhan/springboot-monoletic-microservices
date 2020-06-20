@@ -1,23 +1,42 @@
 package com.mypractice.microservices.userapi.controller;
 
+import static com.mypractice.microservices.userapi.util.ObjectUtilMapper.map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
+import com.mypractice.microservices.userapi.dto.UserDto;
+import com.mypractice.microservices.userapi.model.UserCreationModel;
+import com.mypractice.microservices.userapi.service.SingUpService;
+/**
+ * nasru - Jun 20, 2020
+ * UserController.java 
+ */
 @RestController
+@RequestMapping("/users")
 public class UserController {
-	@Autowired
+
+	private SingUpService singUpService;
 	private Environment env;
-	@GetMapping("/flux")
-	public Flux<Integer> returnFlux() {
-		return Flux.just(1, 2, 3, 4, 5, 6).log();
+	@Autowired
+	public UserController(final Environment env, final SingUpService singUpService) {
+		this.env = env;
+		this.singUpService = singUpService;
 	}
+
 	@GetMapping("/user")
-	public Mono<String> returnMono() {
-		return Mono.just(env.getProperty("user.username") +"User Api working "+ env.getProperty("local.server.port")).log();
+	public String returnMono() {
+		return env.getProperty("user.username") +" User Api working "+ env.getProperty("local.server.port");
+	}
+	@PostMapping("/signup")
+	public UserDto createUser(@RequestBody UserCreationModel userCreationModel) {
+		UserDto userDto = map(userCreationModel, UserDto.class);
+		userDto = singUpService.createUser(userDto);
+		return userDto;
 	}
 }
