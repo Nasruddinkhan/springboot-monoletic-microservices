@@ -2,10 +2,13 @@ package com.mypractice.microservices.userapi.model;
 
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * nasru - Jun 20, 2020
  * UserCreationModel.java 
  */
+@XmlRootElement
 public final class UserCreationModel {
 	private String username;
 	private String password;

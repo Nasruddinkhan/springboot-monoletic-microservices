@@ -6,17 +6,17 @@ package com.mypractice.microservices.userapi.serviceimpl;
 
 import static com.mypractice.microservices.userapi.util.ObjectUtilMapper.map;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import com.mypractice.microservices.userapi.document.Role;
 import com.mypractice.microservices.userapi.document.User;
 import com.mypractice.microservices.userapi.dto.UserDto;
-import com.mypractice.microservices.userapi.enmus.UserRole;
-import com.mypractice.microservices.userapi.repository.RoleRepository;
+import com.mypractice.microservices.userapi.model.RoleResponseModel;
 import com.mypractice.microservices.userapi.repository.UserRepository;
 import com.mypractice.microservices.userapi.service.SingUpService;
 
@@ -27,35 +27,30 @@ import com.mypractice.microservices.userapi.service.SingUpService;
 @Service("singUpService")
 public class SingUpServiceImpl implements SingUpService {
 	private UserRepository userRepository;
-	private RoleRepository roleRepository;
+	private RestTemplate restTemplate;
 	@Autowired
-	public SingUpServiceImpl(final UserRepository userRepository,final RoleRepository roleRepository) {
+	public SingUpServiceImpl(final UserRepository userRepository, final RestTemplate restTemplate) {
 		super();
+		this.restTemplate = restTemplate;
 		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
 	}
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
 		User user =  map(userDto, User.class);
-		Set<String> strRoles = userDto.getRoles();
-		Set<Role> roles = new HashSet<>();
-		strRoles.forEach(role ->{ 
-			switch (role) {
-			case "admin":
-				roles.add(roleRepository.findByName(UserRole.ROLE_ADMIN));
-				break;
-			case "user":
-				roles.add(roleRepository.findByName(UserRole.ROLE_ADMIN));
-				break;
-			default:
-				break;
-			}
-		});
-		user.setRoles(roles);
+		user.setRoles(getRoles(userDto.getRoles()));
 		user = userRepository.save(user);
 		System.out.println(user);
 		return map(user, UserDto.class);
 	}
 
+	/**
+	 * @return
+	 */
+	private Set<RoleResponseModel> getRoles(Set<String> roles) {
+		// TODO Auto-generated method stub
+		return   roles.stream()
+				.map(s ->restTemplate.getForObject("http://localhost:8765/master-ws/roles/role/{name}/name", RoleResponseModel.class, s))
+				.collect(Collectors.toSet());
+	}
 }

@@ -6,6 +6,9 @@ import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mypractice.microservices.userapi.model.RoleResponseModel;
 /**
  * nasru - Jun 20, 2020
  * User.java 
@@ -16,9 +19,10 @@ public class User {
 	private String userid;
 	private String username;
 	private String email;
+	@JsonIgnore
 	private String password;
-	@DBRef
-	private Set<Role> roles = new HashSet<>();
+	@JsonIgnore
+	private Set<RoleResponseModel> roles = new HashSet<>();
 	public String getUserid() {
 		return userid;
 	}
@@ -43,10 +47,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Set<Role> getRoles() {
+	
+	public Set<RoleResponseModel> getRoles() {
 		return roles;
 	}
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(Set<RoleResponseModel> roles) {
 		this.roles = roles;
 	}
 	@Override
