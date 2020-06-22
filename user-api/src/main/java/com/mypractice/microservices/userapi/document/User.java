@@ -3,11 +3,10 @@ package com.mypractice.microservices.userapi.document;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mypractice.microservices.userapi.model.RoleResponseModel;
 /**
  * nasru - Jun 20, 2020
@@ -18,6 +17,7 @@ public class User {
 	@Id
 	private String userid;
 	private String username;
+	@Indexed(unique=true, sparse=true)
 	private String email;
 	@JsonIgnore
 	private String password;
@@ -53,11 +53,6 @@ public class User {
 	}
 	public void setRoles(Set<RoleResponseModel> roles) {
 		this.roles = roles;
-	}
-	@Override
-	public String toString() {
-		return "User [userid=" + userid + ", username=" + username + ", email=" + email + ", password=" + password
-				+ ", roles=" + roles + "]";
 	}
 
 }

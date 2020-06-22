@@ -1,6 +1,9 @@
 package com.mypractice.microservices.userapi.dto;
 
+import java.util.HashSet;
 import java.util.Set;
+
+import com.mypractice.microservices.userapi.model.RoleResponseModel;
 
 /**
  * nasru - Jun 20, 2020
@@ -10,7 +13,7 @@ public final class UserDto {
 	private String username;
 	private String password;
 	private String email;
-	private Set<String> roles;
+	private Set<RoleResponseModel> roles = new HashSet<>();
 	private String userid;
 	
 	public String getUserid() {
@@ -19,10 +22,10 @@ public final class UserDto {
 	public void setUserid(String userid) {
 		this.userid = userid;
 	}
-	public Set<String> getRoles() {
+	public Set<RoleResponseModel>  getRoles() {
 		return roles;
 	}
-	public void setRoles(Set<String> roles) {
+	public void setRoles(Set<RoleResponseModel>  roles) {
 		this.roles = roles;
 	}
 	public String getUsername() {

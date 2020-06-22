@@ -10,12 +10,12 @@ import com.mypractice.microservices.userapi.dto.UserDto;
  * @author nasru
  *
  */
-public interface SingUpService {
+public interface SingUpService extends UserSerivice{
 
 	/**
 	 * @param userDto
 	 * @return
 	 */
 	UserDto createUser(UserDto userDto);
-
+	UserDto getUserDetailsByEmail(String email);
 }

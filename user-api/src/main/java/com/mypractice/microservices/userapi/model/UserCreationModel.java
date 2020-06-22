@@ -13,7 +13,7 @@ public final class UserCreationModel {
 	private String username;
 	private String password;
 	private String email;
-	private Set<String> roles;
+	private Set<RoleResponseModel>  roles;
 	private String userid;
 	
 	public String getUserid() {
@@ -22,10 +22,10 @@ public final class UserCreationModel {
 	public void setUserid(String userid) {
 		this.userid = userid;
 	}
-	public Set<String> getRoles() {
+	public Set<RoleResponseModel>  getRoles() {
 		return roles;
 	}
-	public void setRoles(Set<String> roles) {
+	public void setRoles(Set<RoleResponseModel>  roles) {
 		this.roles = roles;
 	}
 	public String getPassword() {
@@ -47,5 +47,4 @@ public final class UserCreationModel {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
 }

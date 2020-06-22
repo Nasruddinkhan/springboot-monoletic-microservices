@@ -52,5 +52,9 @@ public final class RoleResponseModel {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "RoleResponseModel [id=" + id + ", name=" + name + "]";
+	}
 	
 }

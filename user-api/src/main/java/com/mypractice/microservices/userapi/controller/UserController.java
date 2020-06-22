@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mypractice.microservices.userapi.dto.UserDto;
 import com.mypractice.microservices.userapi.model.UserCreationModel;
+import com.mypractice.microservices.userapi.model.UserResponseModel;
 import com.mypractice.microservices.userapi.service.SingUpService;
 /**
  * nasru - Jun 20, 2020
@@ -34,9 +35,9 @@ public class UserController {
 		return env.getProperty("user.username") +" User Api working "+ env.getProperty("local.server.port");
 	}
 	@PostMapping("/signup")
-	public UserDto createUser(@RequestBody UserCreationModel userCreationModel) {
+	public UserResponseModel createUser(@RequestBody UserCreationModel userCreationModel) {
 		UserDto userDto = map(userCreationModel, UserDto.class);
 		userDto = singUpService.createUser(userDto);
-		return userDto;
+		return  map(userDto, UserResponseModel.class); 
 	}
 }
