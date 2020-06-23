@@ -15,19 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypractice.microservices.userapi.dto.UserDto;
 import com.mypractice.microservices.userapi.model.LoginRequestModel;
 import com.mypractice.microservices.userapi.service.SingUpService;
-import com.mypractice.microservices.userapi.service.UserSerivice;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -68,6 +65,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 		String userName =	((User) auth.getPrincipal()).getUsername();
 		UserDto userDetails =  usersService.getUserDetailsByEmail(userName);
+		System.out.println(env.getProperty("token.expiration"));
+		System.out.println(env.getProperty("token.secret"));
 		//usersService.
 		String token = Jwts.builder()
 				  .setSubject(userDetails.getUserid())

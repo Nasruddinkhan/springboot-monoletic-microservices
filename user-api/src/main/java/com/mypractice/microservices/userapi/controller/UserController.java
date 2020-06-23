@@ -32,7 +32,7 @@ public class UserController {
 
 	@GetMapping("/user")
 	public String returnMono() {
-		return env.getProperty("user.username") +" User Api working "+ env.getProperty("local.server.port");
+		return env.getProperty("user.username") +" User Api working "+ env.getProperty("local.server.port") +" secret key "+env.getProperty("token.secret");
 	}
 	@PostMapping("/signup")
 	public UserResponseModel createUser(@RequestBody UserCreationModel userCreationModel) {

@@ -65,7 +65,7 @@ public class AuthorizationFIlter extends BasicAuthenticationFilter {
 		if (authorizationHeader == null)
 			return null;
 		String token = authorizationHeader.replaceAll(env.getProperty("authorization.token.header.prefix"), "");
-		
+		System.out.println(env.getProperty("token.secret"));
 		String userID = Jwts.parser()
 				  .setSigningKey(env.getProperty("token.secret"))
 				  .parseClaimsJws(token)
