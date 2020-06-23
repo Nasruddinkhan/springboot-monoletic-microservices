@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/users/signup/**").permitAll()
-//		http.authorizeRequests().antMatchers("/**").hasIpAddress(env.getProperty("getway.ip"))
+//		http.authorizeRequests().antMatchers("/users/signup/**").permitAll()
+		http.authorizeRequests().antMatchers("/**").hasIpAddress(env.getProperty("getway.ip"))
 		.and()
 		.addFilter(getAuthenticationFilter());
 		http.headers().frameOptions().disable();
@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private AuthenticationFilter getAuthenticationFilter() throws Exception {
 		// TODO Auto-generated method stub
 		AuthenticationFilter authenticationFilter = new AuthenticationFilter( env, usersService, authenticationManager());
+		authenticationFilter.setFilterProcessesUrl(env.getProperty("signin.url.path"));
 		return authenticationFilter;
 	}
 	@Override

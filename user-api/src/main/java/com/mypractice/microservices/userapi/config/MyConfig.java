@@ -4,6 +4,10 @@
  */
 package com.mypractice.microservices.userapi.config;
 
+import java.time.Duration;
+
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,9 +23,12 @@ public class MyConfig {
 	public MyConfig() {
 		super();
 	}
+	//@LoadBalanced
 	@Bean
-	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
+	public RestTemplate getRestTemplate(RestTemplateBuilder restTemplateBuilder) {
+		return restTemplateBuilder
+		        .setReadTimeout(Duration.ofSeconds(30))
+		        .build();
 	}
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {

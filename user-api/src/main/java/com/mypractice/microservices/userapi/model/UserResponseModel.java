@@ -13,6 +13,14 @@ public final class UserResponseModel {
 	private String password;
 	private String email;
 	private String userid;
+	private String port;
+	
+	public String getPort() {
+		return port;
+	}
+	public void setPort(String port) {
+		this.port = port;
+	}
 	public String getUsername() {
 		return username;
 	}

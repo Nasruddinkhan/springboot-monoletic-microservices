@@ -38,6 +38,8 @@ public class UserController {
 	public UserResponseModel createUser(@RequestBody UserCreationModel userCreationModel) {
 		UserDto userDto = map(userCreationModel, UserDto.class);
 		userDto = singUpService.createUser(userDto);
-		return  map(userDto, UserResponseModel.class); 
+		UserResponseModel response  =  map(userDto, UserResponseModel.class);
+		response.setPort(env.getProperty("local.server.port"));
+		return response; 
 	}
 }
