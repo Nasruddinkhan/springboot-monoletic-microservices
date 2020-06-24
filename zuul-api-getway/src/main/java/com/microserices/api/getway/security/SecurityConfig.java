@@ -33,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.headers().frameOptions().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests() 
+			.antMatchers(env.getProperty("user-ws.actuator.path")).permitAll()
+			.antMatchers(env.getProperty("api-getway.actuator.path")).permitAll()
 			.antMatchers(HttpMethod.POST, env.getProperty("api.signin.path")).permitAll()
 			.antMatchers(HttpMethod.POST, env.getProperty("api.signup.path")).permitAll()
 			.anyRequest().authenticated()
