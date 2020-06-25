@@ -23,7 +23,7 @@ public class MyConfig {
 	public MyConfig() {
 		super();
 	}
-	//@LoadBalanced
+	@LoadBalanced
 	@Bean
 	public RestTemplate getRestTemplate(RestTemplateBuilder restTemplateBuilder) {
 		return restTemplateBuilder

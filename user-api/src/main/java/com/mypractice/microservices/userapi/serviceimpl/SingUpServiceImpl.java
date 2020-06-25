@@ -11,12 +11,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.mypractice.microservices.userapi.config.MasterApiClient;
 import com.mypractice.microservices.userapi.document.User;
 import com.mypractice.microservices.userapi.dto.UserDto;
 import com.mypractice.microservices.userapi.model.RoleResponseModel;
@@ -31,16 +33,22 @@ import com.mypractice.microservices.userapi.service.UserSerivice;
 @Service("singUpService")
 public class SingUpServiceImpl implements SingUpService, UserSerivice {
 	private UserRepository userRepository;
-	private RestTemplate restTemplate;
+	private MasterApiClient masterApi;
 	private BCryptPasswordEncoder bcryptPasswordEncode;
-
+    private Environment env;
+    private RestTemplate restTemplate;
 	@Autowired
-	public SingUpServiceImpl(final UserRepository userRepository, final RestTemplate restTemplate,
-			final BCryptPasswordEncoder bcryptPasswordEncode) {
+	public SingUpServiceImpl(final UserRepository userRepository, 
+			final RestTemplate restTemplate,
+			final BCryptPasswordEncoder bcryptPasswordEncode,
+			final Environment env,
+			final MasterApiClient masterApi) {
 		super();
-		this.restTemplate = restTemplate;
+		this.masterApi = masterApi;
 		this.userRepository = userRepository;
 		this.bcryptPasswordEncode = bcryptPasswordEncode;
+		this.env = env;
+		this.restTemplate= restTemplate;
 	}
 
 	@Override
@@ -49,7 +57,6 @@ public class SingUpServiceImpl implements SingUpService, UserSerivice {
 		user.setRoles(getRoles(userDto.getRoles()));
 		user.setPassword(bcryptPasswordEncode.encode(userDto.getPassword()));
 		user = userRepository.save(user);
-		System.out.println(user);
 		return map(user, UserDto.class);
 	}
 
@@ -58,9 +65,9 @@ public class SingUpServiceImpl implements SingUpService, UserSerivice {
 	 */
 	private Set<RoleResponseModel> getRoles(Set<RoleResponseModel> roles) {
 		// TODO Auto-generated method stub
+		
 		return roles.stream()
-				.map(s -> restTemplate.getForObject("http://localhost:8765/master-ws/roles/role/{name}/name",
-						RoleResponseModel.class, s.getName()))
+				.map(s -> masterApi.getRoles(s.getName()))
 				.collect(Collectors.toSet());
 	}
 

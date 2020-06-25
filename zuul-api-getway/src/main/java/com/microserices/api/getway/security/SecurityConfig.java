@@ -21,18 +21,22 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private Environment env;
-	
 	public SecurityConfig(final Environment env) {
 		super();
 		this.env = env;
 	}
-
 	@Override
 	protected void configure(HttpSecurity  http) throws Exception {
 		http.csrf().disable();
 		http.headers().frameOptions().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests() 
+		
+            .antMatchers(env.getProperty("user-ws.vc.api-docs"),
+	            		env.getProperty("user-ws.ui.api-configuration"), 
+	            		env.getProperty("user-ws.swagger.resources"), 
+	            		env.getProperty("user-ws.configuration.security"), 
+	            		env.getProperty("user-ws.ui.swagger")).permitAll()
 			.antMatchers(env.getProperty("user-ws.actuator.path")).permitAll()
 			.antMatchers(env.getProperty("api-getway.actuator.path")).permitAll()
 			.antMatchers(HttpMethod.POST, env.getProperty("api.signin.path")).permitAll()
