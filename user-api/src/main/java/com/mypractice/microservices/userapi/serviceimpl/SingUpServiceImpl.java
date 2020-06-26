@@ -10,13 +10,12 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.mypractice.microservices.userapi.config.MasterApiClient;
 import com.mypractice.microservices.userapi.document.User;
@@ -32,31 +31,36 @@ import com.mypractice.microservices.userapi.service.UserSerivice;
  */
 @Service("singUpService")
 public class SingUpServiceImpl implements SingUpService, UserSerivice {
+	org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 	private UserRepository userRepository;
 	private MasterApiClient masterApi;
 	private BCryptPasswordEncoder bcryptPasswordEncode;
-    private Environment env;
-    private RestTemplate restTemplate;
+   // private Environment env;
+   // private RestTemplate restTemplate;
 	@Autowired
 	public SingUpServiceImpl(final UserRepository userRepository, 
-			final RestTemplate restTemplate,
+			//final RestTemplate restTemplate,
 			final BCryptPasswordEncoder bcryptPasswordEncode,
-			final Environment env,
+			//final Environment env,
 			final MasterApiClient masterApi) {
 		super();
 		this.masterApi = masterApi;
 		this.userRepository = userRepository;
 		this.bcryptPasswordEncode = bcryptPasswordEncode;
-		this.env = env;
-		this.restTemplate= restTemplate;
+		//this.env = env;
+		//this.restTemplate= restTemplate;
 	}
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
+		logger.info("SingUpServiceImpl.createUser() start ->{}", userDto );
 		User user = map(userDto, User.class);
+		logger.info("Before calling my master microservices start ");
 		user.setRoles(getRoles(userDto.getRoles()));
+		logger.info("Before calling my master microservices end");
 		user.setPassword(bcryptPasswordEncode.encode(userDto.getPassword()));
 		user = userRepository.save(user);
+		logger.info("SingUpServiceImpl.createUser() end ->{}", userDto );
 		return map(user, UserDto.class);
 	}
 

@@ -18,6 +18,6 @@ import com.mypractice.microservices.userapi.util.MasterApiFallback;
 @FeignClient(name = "master-ws", fallbackFactory = MasterApiFallback.class )
 public interface MasterApiClient {
 
-	@GetMapping("/roles/role/{name}/names")
+	@GetMapping("/roles/role/{name}/name")
 	public RoleResponseModel getRoles(@PathVariable("name") String name);
 }

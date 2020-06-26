@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.hateoas.EntityModel;
@@ -25,6 +26,7 @@ import com.microserices.masterapi.repository.RoleRepository;
 @RestController
 @RequestMapping("/roles")
 public  class RoleController {
+	org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 	private RoleRepository roleRepository;
 	private Environment env;
 	@Autowired
@@ -83,6 +85,7 @@ public  class RoleController {
 	}
 	@PostMapping("/role/name")
 	public List<String> retrieveRoleByname(@RequestBody List<String> name) {
+		logger.info("callig retrieveRoleByname microservices");
 		return roleRepository
 							.findByName(name)
 							.stream()
